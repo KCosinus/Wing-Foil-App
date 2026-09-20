@@ -58,6 +58,7 @@ async function getCospudenerSeeWeather(logForecast = true) {
             'Fehler beim Abrufen der Wetterdaten:',
             error.response?.data || error.message
         );
+        throw error;
     }
 }
 

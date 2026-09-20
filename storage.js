@@ -38,7 +38,11 @@ async function saveWeatherRecord(current) {
     if (useSupabase) {
         await supabaseRequest('POST', 'weather_measurements?on_conflict=station_id,timestamp', {
             station_id: 'cospudener-see',
-            ...record
+            timestamp: record.timestamp,
+            temperature: record.temperature,
+            wind_speed: record.windSpeed,
+            wind_gust: record.windGust,
+            wind_direction: record.windDirection
         });
         return;
     }
