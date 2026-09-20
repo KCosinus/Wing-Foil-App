@@ -14,9 +14,9 @@ function toRecord(current) {
         waterTemperature: current.water_temperature,
         humidity: current.relative_humidity,
         pressure: current.pressure,
-        windSpeed: current.wind_speed_10m,
+        windSpeed: Number(current.wind_speed_10m.toFixed(1)),
         windDirection: current.wind_direction_10m,
-        windGust: current.wind_gusts_10m
+        windGust: Number(current.wind_gusts_10m.toFixed(1))
     };
 }
 
