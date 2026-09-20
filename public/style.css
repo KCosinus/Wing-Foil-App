@@ -56,10 +56,12 @@ h2 { margin: 0; font-size: 2rem; font-weight: 400; }
 .updated-label, .unit-label { margin: 0; color: #6c8588; font: 0.75rem Arial, sans-serif; }
 .updated-label strong { color: #183642; font-weight: 700; }
 
-.summary { display: grid; grid-template-columns: 1.2fr 1.2fr 1fr; gap: 2px; margin-bottom: 22px; background: #b8ceca; }
+.summary { display: grid; grid-template-columns: 1.2fr 1.2fr 1fr 1fr 1fr; gap: 2px; margin-bottom: 22px; background: #b8ceca; }
 .summary div { min-height: 132px; padding: 22px; background: #f8f4ec; }
 .summary-main { background: #d9e8e5 !important; }
 .summary-gust { background: #f7e1c6 !important; }
+.summary-air { background: #eef0e2 !important; }
+.summary-water { background: #dce9ef !important; }
 .summary span { display: block; margin-bottom: 17px; color: #527078; font: 700 0.7rem Arial, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; }
 .summary strong { display: block; font-size: 2.25rem; line-height: 1; font-weight: 400; }
 .summary small { display: block; margin-top: 12px; color: #6c8588; font: 0.75rem Arial, sans-serif; }

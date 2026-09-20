@@ -4,6 +4,8 @@ const elements = {
     points: document.querySelector('#points'),
     wind: document.querySelector('#wind'),
     gust: document.querySelector('#gust'),
+    airTemperature: document.querySelector('#air-temperature'),
+    waterTemperature: document.querySelector('#water-temperature'),
     updated: document.querySelector('#updated'),
     empty: document.querySelector('#empty'),
     refresh: document.querySelector('#refresh'),
@@ -27,6 +29,8 @@ function renderChart(history) {
     if (!history.length) {
         elements.wind.textContent = '-';
         elements.gust.textContent = '-';
+        elements.airTemperature.textContent = '-';
+        elements.waterTemperature.textContent = '-';
         elements.updated.textContent = '-';
         return;
     }
@@ -34,6 +38,8 @@ function renderChart(history) {
     const latest = history[history.length - 1];
     elements.wind.textContent = `${latest.windSpeed.toFixed(1)} kn`;
     elements.gust.textContent = `${latest.windGust.toFixed(1)} kn`;
+    elements.airTemperature.textContent = `${latest.temperature?.toFixed(1) ?? '-'} °C`;
+    elements.waterTemperature.textContent = `${latest.waterTemperature?.toFixed(1) ?? '-'} °C`;
     elements.updated.textContent = formatTime(latest.timestamp);
     elements.readings.innerHTML = history.slice(-8).reverse().map((entry) => {
         const difference = entry.windGust - entry.windSpeed;
