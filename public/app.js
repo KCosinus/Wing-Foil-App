@@ -9,6 +9,7 @@ const elements = {
     empty: document.querySelector('#empty'),
     refresh: document.querySelector('#refresh'),
     readings: document.querySelector('#readings'),
+    yTicks: document.querySelector('#y-ticks'),
     webcamGrid: document.querySelector('#webcam-grid'),
     webcamStatus: document.querySelector('#webcam-status')
 };
@@ -33,6 +34,13 @@ function renderChart(history) {
     }
 
     const latest = history[history.length - 1];
+    const maximumWind = Math.max(...history.map((entry) => entry.windGust));
+    const tickStep = 5;
+    const maximumTick = Math.max(tickStep, Math.ceil(maximumWind / tickStep) * tickStep);
+    elements.yTicks.innerHTML = Array.from(
+        { length: maximumTick / tickStep + 1 },
+        (_, index) => `<span>${maximumTick - index * tickStep}</span>`
+    ).join('');
     elements.wind.textContent = `${latest.windSpeed.toFixed(1)} kn`;
     elements.gust.textContent = `${latest.windGust.toFixed(1)} kn`;
     elements.airTemperature.textContent = `${latest.temperature?.toFixed(1) ?? '-'} °C`;
@@ -74,6 +82,7 @@ function renderChart(history) {
 
     if (chart) {
         chart.data = chartData;
+        chart.options.scales.y.max = maximumTick;
         chart.update();
         return;
     }
@@ -91,10 +100,11 @@ function renderChart(history) {
                     ticks: { maxTicksLimit: 8, color: '#6c8588' }
                 },
                 y: {
-                    title: { display: true, text: 'Knoten', color: '#6c8588' },
+                    display: true,
                     beginAtZero: true,
+                    max: maximumTick,
                     grid: { color: 'rgba(24, 54, 66, 0.08)' },
-                    ticks: { color: '#6c8588' }
+                    ticks: { display: false }
                 },
             },
             plugins: {

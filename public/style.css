@@ -75,7 +75,12 @@ h2 { margin: 0; font-size: 2rem; font-weight: 400; }
 .legend-wind::before, .legend-gust::before { display: inline-block; width: 18px; height: 3px; margin: 0 7px 3px 0; content: ''; background: #0c7182; }
 .legend-gust::before { background: #ef8354; }
 .threshold { margin-left: auto; color: #8ba0a0; }
-.chart-wrap { position: relative; height: min(48vh, 440px); min-height: 300px; }
+.chart-layout { display: flex; height: min(48vh, 440px); min-height: 300px; }
+.chart-y-axis { position: relative; flex: 0 0 38px; color: #6c8588; font: 0.68rem Arial, sans-serif; }
+.y-axis-title { position: absolute; top: -2px; left: 0; color: #0c7182; font-weight: 700; }
+#y-ticks { position: absolute; inset: 17px 0 35px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 8px; }
+.chart-scroll { min-width: 0; flex: 1; overflow-x: auto; overflow-y: hidden; }
+.chart-wrap { position: relative; height: 100%; min-width: 100%; }
 .empty { position: absolute; inset: 50% auto auto 50%; transform: translate(-50%, -50%); color: #527078; font: 0.9rem Arial, sans-serif; }
 
 .readings-panel { margin-top: 22px; padding: 24px; }
@@ -112,8 +117,9 @@ td.gust-value { color: #d65f36; font-weight: 700; }
     .summary strong { font-size: 1.8rem; }
     .summary-air strong, .summary-water strong { font-size: 1.45rem; }
     .chart-panel, .readings-panel { padding: 16px; }
-    .chart-panel { overflow-x: auto; }
-    .chart-panel .chart-legend, .chart-panel .chart-wrap { min-width: 720px; }
+    .chart-panel { overflow: hidden; }
+    .chart-panel .chart-legend { position: relative; z-index: 2; }
+    .chart-panel .chart-wrap { min-width: 720px; }
     .table-scroll table { min-width: 560px; }
     .chart-legend { flex-wrap: wrap; gap: 12px 18px; }
     .threshold { width: 100%; margin-left: 0; }

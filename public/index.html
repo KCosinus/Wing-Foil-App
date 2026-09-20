@@ -42,9 +42,17 @@
 
             <section class="chart-panel">
                 <div class="chart-legend"><span class="legend-wind">Grundwind</span><span class="legend-gust">Böen</span><span class="threshold">15-Minuten-Auflösung</span></div>
-                <div class="chart-wrap">
-                    <canvas id="wind-chart" aria-label="Grundwind und Böen als Liniendiagramm"></canvas>
-                    <p id="empty" class="empty" hidden>Noch keine gespeicherten Messwerte vorhanden.</p>
+                <div class="chart-layout">
+                    <div class="chart-y-axis" aria-hidden="true">
+                        <span class="y-axis-title">kn</span>
+                        <div id="y-ticks"></div>
+                    </div>
+                    <div class="chart-scroll">
+                        <div class="chart-wrap">
+                            <canvas id="wind-chart" aria-label="Grundwind und Böen als Liniendiagramm"></canvas>
+                            <p id="empty" class="empty" hidden>Noch keine gespeicherten Messwerte vorhanden.</p>
+                        </div>
+                    </div>
                 </div>
             </section>
 
