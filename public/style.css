@@ -112,6 +112,8 @@ td.gust-value { color: #d65f36; font-weight: 700; }
     .summary strong { font-size: 1.8rem; }
     .summary-air strong, .summary-water strong { font-size: 1.45rem; }
     .chart-panel, .readings-panel { padding: 16px; }
+    .chart-panel { overflow-x: auto; }
+    .chart-panel .chart-legend, .chart-panel .chart-wrap { min-width: 720px; }
     .table-scroll table { min-width: 560px; }
     .chart-legend { flex-wrap: wrap; gap: 12px 18px; }
     .threshold { width: 100%; margin-left: 0; }
