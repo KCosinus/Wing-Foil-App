@@ -3,6 +3,9 @@ create table if not exists public.weather_measurements (
     station_id text not null,
     timestamp timestamptz not null,
     temperature numeric,
+    water_temperature numeric,
+    humidity numeric,
+    pressure numeric,
     wind_speed numeric,
     wind_gust numeric,
     wind_direction numeric,
@@ -14,3 +17,8 @@ create index if not exists weather_measurements_station_timestamp_idx
     on public.weather_measurements (station_id, timestamp desc);
 
 alter table public.weather_measurements enable row level security;
+
+alter table public.weather_measurements
+    add column if not exists water_temperature numeric,
+    add column if not exists humidity numeric,
+    add column if not exists pressure numeric;

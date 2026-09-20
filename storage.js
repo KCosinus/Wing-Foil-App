@@ -11,6 +11,9 @@ function toRecord(current) {
     return {
         timestamp: current.time,
         temperature: current.temperature_2m,
+        waterTemperature: current.water_temperature,
+        humidity: current.relative_humidity,
+        pressure: current.pressure,
         windSpeed: current.wind_speed_10m,
         windDirection: current.wind_direction_10m,
         windGust: current.wind_gusts_10m
@@ -40,6 +43,9 @@ async function saveWeatherRecord(current) {
             station_id: 'cospudener-see',
             timestamp: record.timestamp,
             temperature: record.temperature,
+            water_temperature: record.waterTemperature,
+            humidity: record.humidity,
+            pressure: record.pressure,
             wind_speed: record.windSpeed,
             wind_gust: record.windGust,
             wind_direction: record.windDirection
@@ -72,6 +78,9 @@ async function readWeatherHistory(hours = 12) {
         return response.data.map((entry) => ({
             timestamp: entry.timestamp,
             temperature: entry.temperature,
+            waterTemperature: entry.water_temperature,
+            humidity: entry.humidity,
+            pressure: entry.pressure,
             windSpeed: entry.wind_speed,
             windDirection: entry.wind_direction,
             windGust: entry.wind_gust

@@ -3,58 +3,43 @@ require('dotenv').config();
 const axios = require('axios');
 const { saveWeatherRecord, useSupabase } = require('./storage');
 
+const stationApi = 'https://api.openmeteo.com/observations/openmeteo/1001';
+const metersPerSecondToKnots = 1.943844;
+
+async function readSensor(sensor) {
+    const { data } = await axios.get(`${stationApi}/${sensor}`, { timeout: 10000 });
+    return data;
+}
+
 async function getCospudenerSeeWeather(logForecast = true) {
-    const url = 'https://api.open-meteo.com/v1/forecast';
-
     try {
-        const { data } = await axios.get(url, {
-            params: {
-                latitude: 51.252,
-                longitude: 12.337,
-                current: [
-                    'temperature_2m',
-                    'wind_speed_10m',
-                    'wind_direction_10m',
-                    'wind_gusts_10m'
-                ].join(','),
-                minutely_15: [
-                    'wind_speed_10m',
-                    'wind_gusts_10m'
-                ].join(','),
-                forecast_days: 1,
-                wind_speed_unit: 'kn',
-                timezone: 'UTC'
-            },
-            timeout: 10000
-        });
+        const [wind, waterTemperature, air, pressure] = await Promise.all([
+            readSensor('wind0'),
+            readSensor('t2'),
+            readSensor('th1'),
+            readSensor('baro0')
+        ]);
+        const current = {
+            time: new Date(wind[0] * 1000).toISOString(),
+            temperature_2m: air[1],
+            water_temperature: waterTemperature[1],
+            relative_humidity: air[2],
+            pressure: pressure[1],
+            wind_speed_10m: wind[3] * metersPerSecondToKnots,
+            wind_direction_10m: wind[1],
+            wind_gusts_10m: wind[2] * metersPerSecondToKnots
+        };
 
-        await saveWeatherRecord(data.current);
+        await saveWeatherRecord(current);
 
         console.log('Wetter am Cospudener See:');
-        console.log(`Gespeichert: ${data.current.time} (${useSupabase ? 'Supabase' : 'lokal'})`);
-        console.log(`Temperatur: ${data.current.temperature_2m} °C`);
-        console.log(`Windgeschwindigkeit: ${data.current.wind_speed_10m} kn`);
-        console.log(`Windrichtung: ${data.current.wind_direction_10m}°`);
-        console.log(`Aktuelle Böe: ${data.current.wind_gusts_10m} kn`);
+        console.log(`Gespeichert: ${current.time} (${useSupabase ? 'Supabase' : 'lokal'})`);
+        console.log(`Grundwind: ${current.wind_speed_10m.toFixed(1)} kn`);
+        console.log(`Böe: ${current.wind_gusts_10m.toFixed(1)} kn`);
+        console.log(`Wassertemperatur: ${current.water_temperature} °C`);
+        console.log(`Lufttemperatur: ${current.temperature_2m} °C`);
 
-        if (logForecast) {
-            console.log('\n--- Windbewertung alle 15 Minuten ---');
-
-            data.minutely_15.time.forEach((time, index) => {
-                const baseWind = data.minutely_15.wind_speed_10m[index];
-                const strongestGust = data.minutely_15.wind_gusts_10m[index];
-                const gustFactor = strongestGust / baseWind;
-
-                console.log(
-                    `${time}: Grundwind ${baseWind.toFixed(1)} kn, `
-                    + `stärkste Böe ${strongestGust.toFixed(1)} kn, `
-                    + `Böenstärke +${(strongestGust - baseWind).toFixed(1)} kn, `
-                    + `Böenfaktor ${gustFactor.toFixed(1)}`
-                );
-            });
-        }
-
-        return data.current;
+        return current;
     } catch (error) {
         console.error(
             'Fehler beim Abrufen der Wetterdaten:',
