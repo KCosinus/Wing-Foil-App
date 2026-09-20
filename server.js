@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const path = require('node:path');
 const { getCospudenerSeeWeather } = require('./fetch_station');
