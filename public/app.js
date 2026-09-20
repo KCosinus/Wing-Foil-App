@@ -1,7 +1,6 @@
 let chart;
 
 const elements = {
-    points: document.querySelector('#points'),
     wind: document.querySelector('#wind'),
     gust: document.querySelector('#gust'),
     airTemperature: document.querySelector('#air-temperature'),
@@ -24,8 +23,6 @@ function formatTime(timestamp) {
 
 function renderChart(history) {
     elements.empty.hidden = history.length > 0;
-    elements.points.textContent = history.length;
-
     if (!history.length) {
         elements.wind.textContent = '-';
         elements.gust.textContent = '-';
