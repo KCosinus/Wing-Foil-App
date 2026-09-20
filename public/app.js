@@ -13,7 +13,8 @@ const elements = {
 function formatTime(timestamp) {
     return new Date(timestamp).toLocaleTimeString('de-DE', {
         hour: '2-digit',
-        minute: '2-digit'
+        minute: '2-digit',
+        timeZone: 'Europe/Berlin'
     });
 }
 

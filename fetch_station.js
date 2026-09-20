@@ -23,7 +23,7 @@ async function getCospudenerSeeWeather(logForecast = true) {
                 ].join(','),
                 forecast_days: 1,
                 wind_speed_unit: 'kn',
-                timezone: 'Europe/Berlin'
+                timezone: 'UTC'
             },
             timeout: 10000
         });
