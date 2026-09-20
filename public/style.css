@@ -75,6 +75,14 @@ th { color: #6c8588; font-size: 0.68rem; letter-spacing: 0.06em; text-transform:
 td { color: #527078; }
 td.gust-value { color: #d65f36; font-weight: 700; }
 
+.webcam-panel { margin-top: 22px; padding: 24px; border: 1px solid rgba(24, 54, 66, 0.1); background: rgba(248, 244, 236, 0.84); }
+.webcam-panel a { color: #0c7182; font: 0.75rem Arial, sans-serif; }
+.webcam-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.webcam-grid figure { margin: 0; background: #d9e8e5; }
+.webcam-grid img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.webcam-grid figcaption { padding: 10px 12px; color: #527078; font: 0.72rem Arial, sans-serif; text-transform: uppercase; letter-spacing: 0.08em; }
+.webcam-status { margin: 14px 0 0; color: #8ba0a0; font: 0.72rem Arial, sans-serif; }
+
 @media (max-width: 700px) {
     .hero, .content { width: min(100% - 24px, 1120px); }
     .hero { padding-top: 24px; padding-bottom: 52px; }
@@ -88,4 +96,5 @@ td.gust-value { color: #d65f36; font-weight: 700; }
     .chart-panel, .readings-panel { padding: 16px; }
     .chart-legend { flex-wrap: wrap; gap: 12px 18px; }
     .threshold { width: 100%; margin-left: 0; }
+    .webcam-grid { grid-template-columns: 1fr; }
 }

@@ -7,7 +7,9 @@ const elements = {
     updated: document.querySelector('#updated'),
     empty: document.querySelector('#empty'),
     refresh: document.querySelector('#refresh'),
-    readings: document.querySelector('#readings')
+    readings: document.querySelector('#readings'),
+    webcamGrid: document.querySelector('#webcam-grid'),
+    webcamStatus: document.querySelector('#webcam-status')
 };
 
 function formatTime(timestamp) {
@@ -108,6 +110,17 @@ async function loadHistory() {
     renderChart(await response.json());
 }
 
+async function loadWebcam() {
+    const response = await fetch(`/api/webcam?cacheBust=${Date.now()}`);
+    if (!response.ok) throw new Error('Webcam konnte nicht geladen werden.');
+
+    const webcam = await response.json();
+    elements.webcamGrid.innerHTML = webcam.images.map((image, index) => (
+        `<figure><img src="${image}?t=${Date.now()}" alt="Webcam Cospudener See ${index + 1}"><figcaption>${index === 0 ? 'Promenade' : 'Wasser'}</figcaption></figure>`
+    )).join('');
+    elements.webcamStatus.textContent = `Abgerufen um ${formatTime(webcam.fetchedAt)}`;
+}
+
 elements.refresh.addEventListener('click', async () => {
     elements.refresh.disabled = true;
     try {
@@ -123,6 +136,14 @@ loadHistory().catch((error) => {
     elements.empty.textContent = error.message;
 });
 
+loadWebcam().catch((error) => {
+    elements.webcamStatus.textContent = error.message;
+});
+
 setInterval(() => {
     loadHistory().catch(() => undefined);
 }, 60 * 1000);
+
+setInterval(() => {
+    loadWebcam().catch(() => undefined);
+}, 15 * 60 * 1000);
