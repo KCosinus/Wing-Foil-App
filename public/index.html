@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Foil-Wetter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="dashboard">
+        <header class="hero">
+            <div class="hero-topline">
+                <p class="eyebrow"><span class="status-dot"></span> Live-Winddaten</p>
+                <span class="station-code">STATION 01 / LEIPZIGER NEUSEENLAND</span>
+            </div>
+            <div class="hero-content">
+                <div>
+                    <p class="location">Cospudener See</p>
+                    <h1>Wind, wie er wirklich ankommt.</h1>
+                    <p class="hero-copy">Die letzten 12 Stunden in 15-Minuten-Schritten. Grundwind und Böen auf einen Blick.</p>
+                </div>
+                <button id="refresh" type="button"><span aria-hidden="true">↻</span> Aktualisieren</button>
+            </div>
+        </header>
+
+        <section class="content" aria-label="Windübersicht">
+            <div class="section-heading">
+                <div>
+                    <p class="section-kicker">Aktueller Überblick</p>
+                    <h2>Windverlauf</h2>
+                </div>
+                <p class="updated-label">Letzter Abruf <strong id="updated">-</strong></p>
+            </div>
+
+            <section class="summary" aria-label="Aktuelle Werte">
+                <div class="summary-main"><span>Grundwind</span><strong id="wind">-</strong><small>aktuell</small></div>
+                <div class="summary-gust"><span>Letzte Böe</span><strong id="gust">-</strong><small>Spitzenwert</small></div>
+                <div><span>Messpunkte</span><strong id="points">-</strong><small>im Zeitraum</small></div>
+            </section>
+
+            <section class="chart-panel">
+                <div class="chart-legend"><span class="legend-wind">Grundwind</span><span class="legend-gust">Böen</span><span class="threshold">15-Minuten-Auflösung</span></div>
+                <div class="chart-wrap">
+                    <canvas id="wind-chart" aria-label="Grundwind und Böen als Liniendiagramm"></canvas>
+                    <p id="empty" class="empty" hidden>Noch keine gespeicherten Messwerte vorhanden.</p>
+                </div>
+            </section>
+
+            <section class="readings-panel">
+                <div class="section-heading compact">
+                    <div><p class="section-kicker">Messprotokoll</p><h2>Letzte Werte</h2></div>
+                    <span class="unit-label">Alle Werte in kn</span>
+                </div>
+                <div class="table-scroll">
+                    <table>
+                        <thead><tr><th>Zeit</th><th>Grundwind</th><th>Böe</th><th>Differenz</th><th>Faktor</th></tr></thead>
+                        <tbody id="readings"></tbody>
+                    </table>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

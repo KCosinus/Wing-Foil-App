@@ -1,0 +1,19 @@
+{
+  "name": "foil_wetter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "fetch_station.js",
+  "scripts": {
+    "start": "node server.js",
+    "fetch": "node fetch_station.js",
+    "test": "node --check server.js && node --check fetch_station.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "axios": "^1.20.0",
+    "express": "^5.2.1"
+  }
+}

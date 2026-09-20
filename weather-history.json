@@ -1,0 +1,44 @@
+[
+  {
+    "timestamp": "2026-09-20T12:15",
+    "temperature": 19.2,
+    "windSpeed": 8.5,
+    "windDirection": 246,
+    "windGust": 14.4
+  },
+  {
+    "timestamp": "2026-09-20T12:30",
+    "temperature": 18.2,
+    "windSpeed": 6.6,
+    "windDirection": 246,
+    "windGust": 13.6
+  },
+  {
+    "timestamp": "2026-09-20T12:45",
+    "temperature": 18,
+    "windSpeed": 5.8,
+    "windDirection": 244,
+    "windGust": 13.6
+  },
+  {
+    "timestamp": "2026-09-20T13:00",
+    "temperature": 17.9,
+    "windSpeed": 5.3,
+    "windDirection": 242,
+    "windGust": 13.4
+  },
+  {
+    "timestamp": "2026-09-20T13:15",
+    "temperature": 18,
+    "windSpeed": 5.2,
+    "windDirection": 236,
+    "windGust": 12.6
+  },
+  {
+    "timestamp": "2026-09-20T13:30",
+    "temperature": 18.1,
+    "windSpeed": 5.4,
+    "windDirection": 229,
+    "windGust": 11.5
+  }
+]
