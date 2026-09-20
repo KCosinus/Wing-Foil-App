@@ -11,11 +11,19 @@ body { margin: 0; min-height: 100vh; background: #e6efec; }
 
 .dashboard {
     min-height: 100vh;
-    background: linear-gradient(180deg, #183642 0 360px, #e6efec 360px 100%);
+    background: #e6efec;
 }
 
 .hero, .content { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
-.hero { padding: 32px 0 76px; color: #f8f4ec; }
+.hero { position: relative; padding: 32px 0 76px; color: #f8f4ec; }
+.hero::before {
+    position: absolute;
+    z-index: 0;
+    inset: 0 calc((min(1120px, 100vw - 40px) - 100vw) / 2);
+    content: '';
+    background: #183642;
+}
+.hero > * { position: relative; z-index: 1; }
 .hero-topline, .hero-content, .section-heading {
     display: flex; align-items: center; justify-content: space-between; gap: 24px;
 }
@@ -41,7 +49,7 @@ button {
 button:hover { color: #183642; background: #edb85f; border-color: #edb85f; }
 button:disabled { cursor: wait; opacity: 0.6; }
 
-.content { padding-bottom: 64px; }
+.content { padding-top: 30px; padding-bottom: 64px; }
 .section-heading { margin-bottom: 18px; }
 .section-kicker { margin-bottom: 6px; color: #0c7182; font: 700 0.7rem Arial, sans-serif; letter-spacing: 0.1em; text-transform: uppercase; }
 h2 { margin: 0; font-size: 2rem; font-weight: 400; }
@@ -90,6 +98,7 @@ td.gust-value { color: #d65f36; font-weight: 700; }
 @media (max-width: 700px) {
     .hero, .content { width: min(100% - 24px, 1120px); }
     .hero { padding-top: 24px; padding-bottom: 52px; }
+    .content { padding-top: 24px; }
     .hero-topline { align-items: start; flex-direction: column; gap: 12px; margin-bottom: 54px; }
     .hero-content, .section-heading { align-items: start; flex-direction: column; gap: 18px; }
     .hero-content button { width: 100%; }
