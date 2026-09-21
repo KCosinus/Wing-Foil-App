@@ -65,6 +65,8 @@ h2 { margin: 0; font-size: 2rem; font-weight: 400; }
 .summary-water { background: #dce9ef !important; }
 .summary-direction { background: #e8e1ef !important; }
 .summary-direction, .summary-air, .summary-water { padding: 18px !important; }
+.direction-reading { display: flex; align-items: center; gap: 10px; }
+.direction-reading i { display: inline-block; color: #765a9b; font: normal 2rem Arial, sans-serif; transform-origin: 50% 55%; transition: transform 180ms ease; }
 .summary span { display: block; margin-bottom: 17px; color: #527078; font: 700 0.7rem Arial, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; }
 .summary strong { display: block; font-size: 2.25rem; line-height: 1; font-weight: 400; }
 .summary-direction strong, .summary-air strong, .summary-water strong { font-size: 1.65rem; }

@@ -4,6 +4,7 @@ const elements = {
     wind: document.querySelector('#wind'),
     gust: document.querySelector('#gust'),
     direction: document.querySelector('#direction'),
+    directionArrow: document.querySelector('#direction-arrow'),
     airTemperature: document.querySelector('#air-temperature'),
     waterTemperature: document.querySelector('#water-temperature'),
     updated: document.querySelector('#updated'),
@@ -29,6 +30,7 @@ function renderChart(history) {
         elements.wind.textContent = '-';
         elements.gust.textContent = '-';
         elements.direction.textContent = '-';
+        elements.directionArrow.style.transform = 'rotate(0deg)';
         elements.airTemperature.textContent = '-';
         elements.waterTemperature.textContent = '-';
         elements.updated.textContent = '-';
@@ -46,6 +48,9 @@ function renderChart(history) {
     elements.wind.textContent = latest.windSpeed === null ? 'nicht aktuell' : `${latest.windSpeed.toFixed(1)} kn`;
     elements.gust.textContent = latest.windGust === null ? 'nicht aktuell' : `${latest.windGust.toFixed(1)} kn`;
     elements.direction.textContent = latest.windDirection === null ? '-' : `${latest.windDirection}°`;
+    elements.directionArrow.style.transform = latest.windDirection === null
+        ? 'rotate(0deg)'
+        : `rotate(${latest.windDirection}deg)`;
     elements.airTemperature.textContent = `${latest.temperature?.toFixed(1) ?? '-'} °C`;
     elements.waterTemperature.textContent = `${latest.waterTemperature?.toFixed(1) ?? '-'} °C`;
     elements.updated.textContent = formatTime(latest.timestamp);
