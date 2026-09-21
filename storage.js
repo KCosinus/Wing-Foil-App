@@ -14,9 +14,10 @@ function toRecord(current) {
         waterTemperature: current.water_temperature,
         humidity: current.relative_humidity,
         pressure: current.pressure,
-        windSpeed: Number(current.wind_speed_10m.toFixed(1)),
+        windSpeed: current.wind_speed_10m === null ? null : Number(current.wind_speed_10m.toFixed(1)),
         windDirection: current.wind_direction_10m,
-        windGust: Number(current.wind_gusts_10m.toFixed(1))
+        windGust: current.wind_gusts_10m === null ? null : Number(current.wind_gusts_10m.toFixed(1)),
+        windObservedAt: current.wind_observed_at
     };
 }
 
@@ -49,6 +50,7 @@ async function saveWeatherRecord(current) {
             wind_speed: record.windSpeed,
             wind_gust: record.windGust,
             wind_direction: record.windDirection
+            ,wind_observed_at: record.windObservedAt
         });
         return;
     }
@@ -81,6 +83,7 @@ async function readWeatherHistory(hours = 12) {
             waterTemperature: entry.water_temperature,
             humidity: entry.humidity,
             pressure: entry.pressure,
+            windObservedAt: entry.wind_observed_at,
             windSpeed: entry.wind_speed,
             windDirection: entry.wind_direction,
             windGust: entry.wind_gust

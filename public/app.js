@@ -41,19 +41,23 @@ function renderChart(history) {
         { length: maximumTick / tickStep + 1 },
         (_, index) => `<span>${maximumTick - index * tickStep}</span>`
     ).join('');
-    elements.wind.textContent = `${latest.windSpeed.toFixed(1)} kn`;
-    elements.gust.textContent = `${latest.windGust.toFixed(1)} kn`;
+    elements.wind.textContent = latest.windSpeed === null ? 'nicht aktuell' : `${latest.windSpeed.toFixed(1)} kn`;
+    elements.gust.textContent = latest.windGust === null ? 'nicht aktuell' : `${latest.windGust.toFixed(1)} kn`;
     elements.airTemperature.textContent = `${latest.temperature?.toFixed(1) ?? '-'} °C`;
     elements.waterTemperature.textContent = `${latest.waterTemperature?.toFixed(1) ?? '-'} °C`;
     elements.updated.textContent = formatTime(latest.timestamp);
     elements.readings.innerHTML = history.slice(-8).reverse().map((entry) => {
-        const difference = entry.windGust - entry.windSpeed;
-        const factor = entry.windSpeed ? entry.windGust / entry.windSpeed : 0;
+        const difference = entry.windSpeed === null || entry.windGust === null
+            ? '-'
+            : `+${(entry.windGust - entry.windSpeed).toFixed(1)} kn`;
+        const factor = entry.windSpeed && entry.windGust
+            ? `${(entry.windGust / entry.windSpeed).toFixed(1)}×`
+            : '-';
         return `<tr><td>${formatTime(entry.timestamp)}</td>`
-            + `<td>${entry.windSpeed.toFixed(1)} kn</td>`
-            + `<td class="gust-value">${entry.windGust.toFixed(1)} kn</td>`
-            + `<td>+${difference.toFixed(1)} kn</td>`
-            + `<td>${factor.toFixed(1)}×</td></tr>`;
+            + `<td>${entry.windSpeed === null ? '-' : `${entry.windSpeed.toFixed(1)} kn`}</td>`
+            + `<td class="gust-value">${entry.windGust === null ? '-' : `${entry.windGust.toFixed(1)} kn`}</td>`
+            + `<td>${difference}</td>`
+            + `<td>${factor}</td></tr>`;
     }).join('');
 
     const chartData = {

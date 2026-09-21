@@ -9,6 +9,7 @@ create table if not exists public.weather_measurements (
     wind_speed numeric,
     wind_gust numeric,
     wind_direction numeric,
+    wind_observed_at timestamptz,
     created_at timestamptz not null default now(),
     unique (station_id, timestamp)
 );
@@ -21,4 +22,5 @@ alter table public.weather_measurements enable row level security;
 alter table public.weather_measurements
     add column if not exists water_temperature numeric,
     add column if not exists humidity numeric,
-    add column if not exists pressure numeric;
+    add column if not exists pressure numeric,
+    add column if not exists wind_observed_at timestamptz;
