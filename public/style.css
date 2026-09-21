@@ -63,7 +63,7 @@ h2 { margin: 0; font-size: 2rem; font-weight: 400; }
 .summary-gust { background: #f7e1c6 !important; }
 .summary-air { background: #eef0e2 !important; }
 .summary-water { background: #dce9ef !important; }
-.summary-direction { background: #e8e1ef !important; }
+.summary-direction { grid-column: 5; background: #f8f4ec !important; }
 .summary-direction, .summary-air, .summary-water { padding: 18px !important; }
 .direction-reading { display: flex; align-items: center; gap: 10px; }
 .direction-reading i { display: inline-block; color: #765a9b; font: normal 2rem Arial, sans-serif; transform-origin: 50% 55%; transition: transform 180ms ease; }
@@ -116,6 +116,7 @@ td.gust-value { color: #d65f36; font-weight: 700; }
     .hero-content, .section-heading { align-items: start; flex-direction: column; gap: 18px; }
     .hero-content button { width: 100%; }
     .summary { grid-template-columns: 1fr 1fr; }
+    .summary-direction { grid-column: auto; }
     .summary div { min-height: 112px; padding: 16px; }
     .summary strong { font-size: 1.8rem; }
     .summary-direction strong, .summary-air strong, .summary-water strong { font-size: 1.45rem; }
