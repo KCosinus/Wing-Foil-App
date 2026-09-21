@@ -3,6 +3,7 @@ let chart;
 const elements = {
     wind: document.querySelector('#wind'),
     gust: document.querySelector('#gust'),
+    direction: document.querySelector('#direction'),
     airTemperature: document.querySelector('#air-temperature'),
     waterTemperature: document.querySelector('#water-temperature'),
     updated: document.querySelector('#updated'),
@@ -27,6 +28,7 @@ function renderChart(history) {
     if (!history.length) {
         elements.wind.textContent = '-';
         elements.gust.textContent = '-';
+        elements.direction.textContent = '-';
         elements.airTemperature.textContent = '-';
         elements.waterTemperature.textContent = '-';
         elements.updated.textContent = '-';
@@ -43,6 +45,7 @@ function renderChart(history) {
     ).join('');
     elements.wind.textContent = latest.windSpeed === null ? 'nicht aktuell' : `${latest.windSpeed.toFixed(1)} kn`;
     elements.gust.textContent = latest.windGust === null ? 'nicht aktuell' : `${latest.windGust.toFixed(1)} kn`;
+    elements.direction.textContent = latest.windDirection === null ? '-' : `${latest.windDirection}°`;
     elements.airTemperature.textContent = `${latest.temperature?.toFixed(1) ?? '-'} °C`;
     elements.waterTemperature.textContent = `${latest.waterTemperature?.toFixed(1) ?? '-'} °C`;
     elements.updated.textContent = formatTime(latest.timestamp);
@@ -56,6 +59,7 @@ function renderChart(history) {
         return `<tr><td>${formatTime(entry.timestamp)}</td>`
             + `<td>${entry.windSpeed === null ? '-' : `${entry.windSpeed.toFixed(1)} kn`}</td>`
             + `<td class="gust-value">${entry.windGust === null ? '-' : `${entry.windGust.toFixed(1)} kn`}</td>`
+            + `<td>${entry.windDirection === null ? '-' : `${entry.windDirection}°`}</td>`
             + `<td>${difference}</td>`
             + `<td>${factor}</td></tr>`;
     }).join('');
