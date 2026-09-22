@@ -1,113 +1,200 @@
+/*
+ * DARK MODE FÜR FOIL-WETTER
+ * Tauscht die hellen "Beige/Creme"-Töne gegen ein tiefes Dunkelblau (#0A1116)
+ * und passt die Akzentfarben für Wind und Böen für besseren Kontrast an.
+ */
+
 * { box-sizing: border-box; }
 
 :root {
-    color: #183642;
-    background: #e6efec;
+    /* GRUNDFARBEN - DARK MODE */
+    color: #e6efec;             /* Sehr heller Text für den Kontrast */
+    background: #0a1116;        /* Sehr dunkler, tiefblauer Hintergrund */
     font-family: Georgia, 'Times New Roman', serif;
     font-synthesis: none;
 }
 
-body { margin: 0; min-height: 100vh; background: #e6efec; }
+body { 
+    margin: 0; 
+    min-height: 100vh; 
+    background: #0a1116; 
+}
 
 .dashboard {
     min-height: 100vh;
-    background: #e6efec;
+    background: #0a1116;
 }
 
+/* CONTAINER UND HERO-BEREICH */
 .hero, .content { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
 .hero { position: relative; padding: 32px 0 76px; color: #f8f4ec; }
+
+/* Der abgedunkelte Hintergrund im Header-Bereich */
 .hero::before {
     position: absolute;
     z-index: 0;
     inset: 0 calc((min(1120px, 100vw - 40px) - 100vw) / 2);
     content: '';
-    background: #183642;
+    background: #121f26; /* Etwas heller als der schwarze Body für Tiefenwirkung */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05); /* Dezenter Trennstrich */
 }
+
 .hero > * { position: relative; z-index: 1; }
 .hero-topline, .hero-content, .section-heading {
     display: flex; align-items: center; justify-content: space-between; gap: 24px;
 }
+
+/* TYPOGRAFIE UND TEXTFARBEN */
 .hero-topline {
-    margin-bottom: 72px; color: #b8ceca; font: 0.7rem Arial, sans-serif;
+    margin-bottom: 72px; 
+    color: #8ba0a0; /* Gedimmtes Türkisgrau */
+    font: 0.7rem Arial, sans-serif;
     letter-spacing: 0.08em; text-transform: uppercase;
 }
 .eyebrow, .location, .section-kicker { margin: 0; }
 .eyebrow { display: flex; align-items: center; gap: 9px; }
-.status-dot { width: 8px; height: 8px; border-radius: 50%; background: #edb85f; box-shadow: 0 0 0 4px rgba(237, 184, 95, 0.14); }
+
+/* Live-Punkt im Header */
+.status-dot { 
+    width: 8px; height: 8px; border-radius: 50%; 
+    background: #4ade80; /* Leuchtendes Grün für "Live/Online" statt Gelb */
+    box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.14); 
+}
 .station-code { opacity: 0.7; }
 .hero-content { align-items: end; }
-.location { margin-bottom: 14px; color: #edb85f; font: 700 0.78rem Arial, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* Standort-Label Cospudener See */
+.location { 
+    margin-bottom: 14px; 
+    color: #4db8ff; /* Helles Blau statt Orange/Gelb */
+    font: 700 0.78rem Arial, sans-serif; 
+    letter-spacing: 0.08em; text-transform: uppercase; 
+}
+
 h1 { max-width: 720px; margin: 0; font-size: clamp(2.5rem, 6vw, 5.4rem); line-height: 0.93; font-weight: 400; }
 .hero-copy { max-width: 460px; margin: 24px 0 0; color: #b8ceca; font-size: 1rem; line-height: 1.5; }
-.station-source { margin: 14px 0 0; color: #8ba0a0; font: 0.72rem Arial, sans-serif; letter-spacing: 0.02em; }
+.station-source { margin: 14px 0 0; color: #6c8588; font: 0.72rem Arial, sans-serif; letter-spacing: 0.02em; }
 
+/* UPDATE BUTTON */
 button {
-    flex: 0 0 auto; border: 1px solid rgba(248, 244, 236, 0.35); border-radius: 3px;
-    padding: 13px 17px; color: #f8f4ec; background: transparent; cursor: pointer;
+    flex: 0 0 auto; 
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+    border-radius: 3px;
+    padding: 13px 17px; 
+    color: #f8f4ec; background: rgba(255, 255, 255, 0.05); 
+    cursor: pointer;
     font: 700 0.78rem Arial, sans-serif; letter-spacing: 0.03em;
-    transition: background 160ms ease, color 160ms ease;
+    transition: background 160ms ease, border-color 160ms ease;
 }
-button:hover { color: #183642; background: #edb85f; border-color: #edb85f; }
-button:disabled { cursor: wait; opacity: 0.6; }
+button:hover { 
+    background: rgba(255, 255, 255, 0.1); 
+    border-color: rgba(255, 255, 255, 0.4); 
+}
+button:disabled { cursor: wait; opacity: 0.4; }
 
+/* HAUPTINHALT - SECTIONS */
 .content { padding-top: 30px; padding-bottom: 64px; }
 .section-heading { margin-bottom: 18px; }
-.section-kicker { margin-bottom: 6px; color: #0c7182; font: 700 0.7rem Arial, sans-serif; letter-spacing: 0.1em; text-transform: uppercase; }
-h2 { margin: 0; font-size: 2rem; font-weight: 400; }
-.updated-label, .unit-label { margin: 0; color: #6c8588; font: 0.75rem Arial, sans-serif; }
-.updated-label strong { color: #183642; font-weight: 700; }
 
-.summary { display: grid; grid-template-columns: 1.2fr 1.2fr 0.72fr 0.72fr 0.72fr; gap: 2px; margin-bottom: 22px; background: #b8ceca; }
-.summary div { min-height: 132px; padding: 22px; background: #f8f4ec; }
-.summary-main { background: #d9e8e5 !important; }
-.summary-gust { background: #f7e1c6 !important; }
-.summary-air { background: #eef0e2 !important; }
-.summary-water { background: #dce9ef !important; }
-.summary-direction { grid-column: 5; background: #f8f4ec !important; }
+/* Kicker (z.B. "Aktuelle Werte") */
+.section-kicker { 
+    margin-bottom: 6px; 
+    color: #4db8ff; /* Helles Blau */
+    font: 700 0.7rem Arial, sans-serif; letter-spacing: 0.1em; text-transform: uppercase; 
+}
+h2 { margin: 0; font-size: 2rem; font-weight: 400; }
+
+/* Labels wie "Letztes Update" */
+.updated-label, .unit-label { margin: 0; color: #8ba0a0; font: 0.75rem Arial, sans-serif; }
+.updated-label strong { color: #f8f4ec; font-weight: 700; }
+
+/* =========================================
+   SUMMARY GRID (Die farbigen Kacheln oben) 
+   ========================================= */
+.summary { 
+    display: grid; 
+    grid-template-columns: 1.2fr 1.2fr 0.72fr 0.72fr 0.72fr; 
+    gap: 2px; 
+    margin-bottom: 22px; 
+    background: #0a1116; /* Dunkler Hintergrund zwischen den Kacheln */
+}
+
+/* Basis-Kachel (Dunkles Grau-Blau) */
+.summary div { 
+    min-height: 132px; 
+    padding: 22px; 
+    background: #18262e; 
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Farbige Highlights der Kacheln im Darkmode */
+.summary-main { background: #1a333d !important; } /* Grundwind: Dunkles Türkis */
+.summary-gust { background: #3b2016 !important; } /* Böen: Dunkles Rostrot */
+.summary-air { background: #1c2621 !important; }  /* Luft: Dunkles Grün-Grau */
+.summary-water { background: #14283b !important; }/* Wasser: Tiefes Ozeanblau */
+.summary-direction { grid-column: 5; background: #18262e !important; }
 .summary-direction, .summary-air, .summary-water { padding: 18px !important; }
+
+/* Kachel-Texte (Labels und Zahlen) */
 .direction-reading { display: flex; align-items: center; gap: 10px; }
-.direction-reading i { display: inline-block; color: #765a9b; font: normal 2rem Arial, sans-serif; transform-origin: 50% 55%; transition: transform 180ms ease; }
-.summary span { display: block; margin-bottom: 17px; color: #527078; font: 700 0.7rem Arial, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; }
-.summary strong { display: block; font-size: 2.25rem; line-height: 1; font-weight: 400; }
+.direction-reading i { display: inline-block; color: #a78bfa; font: normal 2rem Arial, sans-serif; transform-origin: 50% 55%; transition: transform 180ms ease; }
+.summary span { 
+    display: block; margin-bottom: 17px; 
+    color: #8ba0a0; /* Helles Grau-Türkis */
+    font: 700 0.7rem Arial, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; 
+}
+.summary strong { display: block; font-size: 2.25rem; line-height: 1; font-weight: 400; color: #f8f4ec; }
 .summary-direction strong, .summary-air strong, .summary-water strong { font-size: 1.65rem; }
 .summary small { display: block; margin-top: 12px; color: #6c8588; font: 0.75rem Arial, sans-serif; }
 
-.chart-panel, .readings-panel { border: 1px solid rgba(24, 54, 66, 0.1); background: rgba(248, 244, 236, 0.84); }
+
+/* =========================================
+   PANELS (Diagramm, Tabelle, Webcam, Windy) 
+   ========================================= */
+.chart-panel, .readings-panel, .webcam-panel, .windy-panel { 
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+    background: #121f26; /* Dunkelblaues Panel-Hintergrund */
+}
+
+/* CHART / DIAGRAMM */
 .chart-panel { padding: 22px 22px 14px; }
-.chart-legend { display: flex; align-items: center; gap: 24px; margin-bottom: 12px; color: #527078; font: 0.75rem Arial, sans-serif; }
-.legend-wind::before, .legend-gust::before { display: inline-block; width: 18px; height: 3px; margin: 0 7px 3px 0; content: ''; background: #0c7182; }
-.legend-gust::before { background: #ef8354; }
-.threshold { margin-left: auto; color: #8ba0a0; }
+.chart-legend { display: flex; align-items: center; gap: 24px; margin-bottom: 12px; color: #b8ceca; font: 0.75rem Arial, sans-serif; }
+.legend-wind::before, .legend-gust::before { display: inline-block; width: 18px; height: 3px; margin: 0 7px 3px 0; content: ''; background: #4db8ff; } /* Helles Blau für Grundwind */
+.legend-gust::before { background: #fb923c; } /* Knalliges Orange für Böen */
+.threshold { margin-left: auto; color: #6c8588; }
 .chart-layout { display: flex; height: min(48vh, 440px); min-height: 300px; }
 .chart-y-axis { position: relative; flex: 0 0 38px; color: #6c8588; font: 0.68rem Arial, sans-serif; }
-.y-axis-title { position: absolute; top: -2px; left: 0; color: #0c7182; font-weight: 700; }
+.y-axis-title { position: absolute; top: -2px; left: 0; color: #8ba0a0; font-weight: 700; }
 #y-ticks { position: absolute; inset: 17px 0 35px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-end; padding-right: 8px; }
 .chart-scroll { min-width: 0; flex: 1; overflow-x: auto; overflow-y: hidden; }
 .chart-wrap { position: relative; height: 100%; min-width: 100%; }
-.empty { position: absolute; inset: 50% auto auto 50%; transform: translate(-50%, -50%); color: #527078; font: 0.9rem Arial, sans-serif; }
+.empty { position: absolute; inset: 50% auto auto 50%; transform: translate(-50%, -50%); color: #6c8588; font: 0.9rem Arial, sans-serif; }
 
+/* TABELLE / READINGS */
 .readings-panel { margin-top: 22px; padding: 24px; }
 .compact { align-items: end; }
 .table-scroll { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font: 0.82rem Arial, sans-serif; }
-th, td { padding: 13px 10px; border-bottom: 1px solid #d7e1de; text-align: right; white-space: nowrap; }
+th, td { padding: 13px 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); text-align: right; white-space: nowrap; }
 th:first-child, td:first-child { text-align: left; }
 th { color: #6c8588; font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; }
-td { color: #527078; }
-td.gust-value { color: #d65f36; font-weight: 700; }
+td { color: #b8ceca; } /* Helle Schrift in der Tabelle */
+td.gust-value { color: #fb923c; font-weight: 700; } /* Orange für Böen in der Tabelle */
 
-.webcam-panel { margin-top: 22px; padding: 24px; border: 1px solid rgba(24, 54, 66, 0.1); background: rgba(248, 244, 236, 0.84); }
-.webcam-panel a { color: #0c7182; font: 0.75rem Arial, sans-serif; }
+/* WEBCAM UND WINDY */
+.webcam-panel { margin-top: 22px; padding: 24px; }
+.webcam-panel a, .windy-panel a { color: #4db8ff; font: 0.75rem Arial, sans-serif; } /* Links in hellem Blau */
 .webcam-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.webcam-grid figure { margin: 0; background: #d9e8e5; }
-.webcam-grid img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
-.webcam-grid figcaption { padding: 10px 12px; color: #527078; font: 0.72rem Arial, sans-serif; text-transform: uppercase; letter-spacing: 0.08em; }
-.webcam-status { margin: 14px 0 0; color: #8ba0a0; font: 0.72rem Arial, sans-serif; }
-.windy-panel { margin-top: 22px; padding: 24px; border: 1px solid rgba(24, 54, 66, 0.1); background: rgba(248, 244, 236, 0.84); }
-.windy-panel a { color: #0c7182; font: 0.75rem Arial, sans-serif; }
-.windy-panel iframe { display: block; width: 100%; height: 520px; margin-top: 18px; border: 0; }
-.model-note { margin: 12px 0 0; color: #8ba0a0; font: 0.72rem Arial, sans-serif; }
+.webcam-grid figure { margin: 0; background: #18262e; border: 1px solid rgba(255, 255, 255, 0.05); }
+.webcam-grid img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; opacity: 0.9; } /* Bilder minimal abdunkeln */
+.webcam-grid figcaption { padding: 10px 12px; color: #8ba0a0; font: 0.72rem Arial, sans-serif; text-transform: uppercase; letter-spacing: 0.08em; }
+.webcam-status { margin: 14px 0 0; color: #6c8588; font: 0.72rem Arial, sans-serif; }
 
+.windy-panel { margin-top: 22px; padding: 24px; }
+.windy-panel iframe { display: block; width: 100%; height: 520px; margin-top: 18px; border: 0; filter: brightness(0.9) contrast(1.1); } /* Windy-Karte anpassen */
+.model-note { margin: 12px 0 0; color: #6c8588; font: 0.72rem Arial, sans-serif; }
+
+/* MOBILE RESPONSIVE */
 @media (max-width: 700px) {
     .hero, .content { width: min(100% - 24px, 1120px); }
     .hero { padding-top: 24px; padding-bottom: 52px; }
@@ -115,11 +202,13 @@ td.gust-value { color: #d65f36; font-weight: 700; }
     .hero-topline { align-items: start; flex-direction: column; gap: 12px; margin-bottom: 54px; }
     .hero-content, .section-heading { align-items: start; flex-direction: column; gap: 18px; }
     .hero-content button { width: 100%; }
+    
     .summary { grid-template-columns: 1fr 1fr; }
     .summary-direction { grid-column: auto; }
     .summary div { min-height: 112px; padding: 16px; }
     .summary strong { font-size: 1.8rem; }
     .summary-direction strong, .summary-air strong, .summary-water strong { font-size: 1.45rem; }
+    
     .chart-panel, .readings-panel { padding: 16px; }
     .chart-panel { overflow: hidden; }
     .chart-panel .chart-legend { position: relative; z-index: 2; }
@@ -127,6 +216,7 @@ td.gust-value { color: #d65f36; font-weight: 700; }
     .table-scroll table { min-width: 560px; }
     .chart-legend { flex-wrap: wrap; gap: 12px 18px; }
     .threshold { width: 100%; margin-left: 0; }
+    
     .webcam-grid { grid-template-columns: 1fr; }
     .windy-panel { padding: 16px; }
     .windy-panel iframe { height: 420px; }
