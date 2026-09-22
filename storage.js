@@ -1,19 +1,40 @@
-const fs = require('node:fs/promises');
-const path = require('node:path');
-const axios = require('axios');
+// storage.js – Modul zum Persistieren und Auslesen von Wettermessungen
+// ---------------------------------------------------------------
+// Imports
+const fs = require('node:fs/promises');          // Async‑File‑API für lokale Speicherung
+const path = require('node:path');               // Hilft beim Erstellen von Pfaden
+const axios = require('axios');                  // HTTP‑Client für Supabase‑Aufrufe
 
+// Pfad zur lokalen History‑Datei
 const historyFile = path.join(__dirname, 'weather-history.json');
+
+// Supabase‑Konfiguration (aus Umgebungsvariablen)
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const useSupabase = Boolean(supabaseUrl && supabaseKey);
+const useSupabase = Boolean(supabaseUrl && supabaseKey); // true → DB, false → lokale JSON
+
+// 15 Minuten‑Bucket (in Millisekunden)
 const intervalMilliseconds = 15 * 60 * 1000;
 
+/**
+ * Rundet einen beliebigen Zeitstempel auf das vorherige 15‑Minuten‑Intervall ab.
+ *
+ * @param {string|number|Date} timestampIsh – Wert, den `new Date()` interpretieren kann.
+ * @returns {string} ISO‑String des gerundeten Zeitpunkts.
+ * @throws {Error} wenn der übergebene Wert keinen gültigen Zeitstempel darstellt.
+ */
 function floorToInterval(timestampIsh) {
     const ms = new Date(timestampIsh).getTime();
     if (!Number.isFinite(ms)) throw new Error(`Ungültiger Zeitstempel: ${timestampIsh}`);
     return new Date(Math.floor(ms / intervalMilliseconds) * intervalMilliseconds).toISOString();
 }
 
+/**
+ * Wandelt das Roh‑Messobjekt (z. B. von einer Wetter‑API) in das interne Record‑Format um.
+ *
+ * @param {Object} current – Roh‑Daten mit Feldern wie `temperature_2m`, `wind_speed_10m` usw.
+ * @returns {Object} Normalisiertes Record‑Objekt.
+ */
 function toRecord(current) {
     return {
         timestamp: floorToInterval(current.time),
@@ -28,6 +49,14 @@ function toRecord(current) {
     };
 }
 
+/**
+ * Hilfsfunktion für sämtliche Supabase‑Requests.
+ *
+ * @param {string} method – HTTP‑Methode (GET, POST, …).
+ * @param {string} endpoint – REST‑Endpoint (z. B. `weather_measurements`).
+ * @param {Object} [body] – JSON‑Payload für POST/PUT‑Requests.
+ * @returns {Promise} Axios‑Promise, das die Server‑Antwort liefert.
+ */
 function supabaseRequest(method, endpoint, body) {
     return axios({
         method,
@@ -43,6 +72,14 @@ function supabaseRequest(method, endpoint, body) {
     });
 }
 
+/**
+ * Baut ein minimales Upsert‑Payload für Supabase auf.
+ * Nur Felder, die neu oder geändert sind, werden gesendet.
+ *
+ * @param {Object} record – Vollständiges Record‑Objekt.
+ * @param {Object} [existing={}] – Optionales bereits in DB vorhandenes Objekt.
+ * @returns {Object} Payload, das an Supabase gesendet wird.
+ */
 function onlyMeaningfulFields(record, existing = {}) {
     const result = {
         station_id: 'cospudener-see',
@@ -67,6 +104,13 @@ function onlyMeaningfulFields(record, existing = {}) {
     return result;
 }
 
+/**
+ * Persistiert ein einzelnes Mess‑Record.
+ * - Bei aktivierter Supabase‑Konfiguration wird ein Upsert via REST‑API ausgeführt.
+ * - Ohne Supabase wird das Record in die lokale `weather-history.json` geschrieben.
+ *
+ * @param {Object} current – Roh‑Messdaten (wie von einer API zurückgeliefert).
+ */
 async function saveWeatherRecord(current) {
     const record = toRecord(current);
 
@@ -76,16 +120,19 @@ async function saveWeatherRecord(current) {
         return;
     }
 
+    // ---------- Lokaler Dateispeicher ----------
     let history = [];
     try {
         history = JSON.parse(await fs.readFile(historyFile, 'utf8'));
     } catch (error) {
-        if (error.code !== 'ENOENT') throw error;
+        if (error.code !== 'ENOENT') throw error; // Nur echte Lesefehler weiterwerfen
     }
 
+    // Prüfen, ob bereits ein Eintrag für dieses Intervall existiert
     const existingIndex = history.findIndex((entry) => entry.timestamp === record.timestamp);
     if (existingIndex >= 0) {
         const prior = history[existingIndex];
+        // Merge: neue Werte überschreiben nur, wenn sie definiert sind
         history[existingIndex] = {
             ...prior,
             temperature:      record.temperature     ?? prior.temperature,
@@ -98,13 +145,21 @@ async function saveWeatherRecord(current) {
             windObservedAt:   record.windObservedAt  ?? prior.windObservedAt
         };
     } else {
+        // Neuer Zeitstempel → einfach anhängen
         history.push(record);
     }
 
+    // Chronologische Reihenfolge sicherstellen
     history.sort((first, second) => first.timestamp.localeCompare(second.timestamp));
     await fs.writeFile(historyFile, `${JSON.stringify(history, null, 2)}\n`);
 }
 
+/**
+ * Füllt fehlende Wind‑Daten (speed, gust, direction, observedAt) anhand des letzten bekannten Wertes.
+ *
+ * @param {Array<Object>} entries – Aufsteigend sortierte Messwerte.
+ * @returns {Array<Object>} Neue Liste mit „forward‑filled“ Wind‑Feldern.
+ */
 function forwardFillWind(entries) {
     let last = { windSpeed: null, windGust: null, windDirection: null, windObservedAt: null };
     return entries.map((entry) => {
@@ -121,6 +176,12 @@ function forwardFillWind(entries) {
     });
 }
 
+/**
+ * Liest die Wetter‑Historie der letzten *hours* Stunden.
+ *
+ * @param {number} [hours=12] – Zeitspanne in Stunden, die zurückgeholt werden soll.
+ * @returns {Promise<Array<Object>>} Array von Records (mit forward‑filled Wind‑Daten).
+ */
 async function readWeatherHistory(hours = 12) {
     if (useSupabase) {
         const since = new Date(Date.now() - hours * 60 * 60 * 1000).toISOString();
@@ -142,6 +203,7 @@ async function readWeatherHistory(hours = 12) {
         return forwardFillWind(entries);
     }
 
+    // ---------- Lokaler Pfad ----------
     try {
         const history = JSON.parse(await fs.readFile(historyFile, 'utf8'));
         const cutoff = Date.now() - hours * 60 * 60 * 1000;
@@ -150,9 +212,10 @@ async function readWeatherHistory(hours = 12) {
             .sort((first, second) => first.timestamp.localeCompare(second.timestamp));
         return forwardFillWind(entries);
     } catch (error) {
-        if (error.code === 'ENOENT') return [];
+        if (error.code === 'ENOENT') return []; // Datei existiert noch nicht → leeres Array
         throw error;
     }
 }
 
+// Exportiert die öffentlichen API‑Funktionen
 module.exports = { saveWeatherRecord, readWeatherHistory, useSupabase };
